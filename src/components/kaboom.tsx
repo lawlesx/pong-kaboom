@@ -1,3 +1,4 @@
+'use client'
 import kaboom from 'kaboom'
 import { useEffect, useRef } from 'react'
 
@@ -206,4 +207,10 @@ const usePongKaboom = () => {
   }
 }
 
-export default usePongKaboom
+const Kaboom = () => {
+  const { canvasRef } = usePongKaboom()
+
+  return <canvas ref={canvasRef} />
+}
+
+export default Kaboom

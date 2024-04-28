@@ -1,5 +1,4 @@
-'use client'
-import usePongKaboom from '@/components/kaboom'
+import Kaboom from '@/components/kaboom'
 import { Metadata } from 'next/types'
 
 export const metadata: Metadata = {
@@ -8,7 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
-  const { canvasRef } = usePongKaboom()
-
-  return <canvas ref={canvasRef} />
+  return <Kaboom />
 }
