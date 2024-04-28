@@ -170,14 +170,15 @@ const usePongKaboom = () => {
 
       // Play again
       k.add([
-        k.text('Press space to play again', {
+        k.text('Press any key to play again', {
           size: 24,
         }),
         k.pos(k.width() / 2, k.height() / 2 + 100),
         k.anchor('center'),
       ])
 
-      k.onKeyPress('space', () => {
+      k.onKeyPress(() => {
+        score = 0
         k.go('main')
       })
     })
