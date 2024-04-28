@@ -34,9 +34,9 @@ const usePongKaboom = () => {
       ])
 
       k.onKeyPress(() => {
-        // k.play('bg', {
-        //   loop: true,
-        // })
+        k.play('bg', {
+          loop: true,
+        })
         k.go('main')
       })
     })
