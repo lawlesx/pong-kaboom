@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     images: {
-      url: 'https://res.cloudinary.com/dk7dt0kk3/image/upload/v1714301230/Pong_Kaboom_meta_cswa00.svg',
+      url: 'https://res.cloudinary.com/dk7dt0kk3/image/upload/v1714310236/Frame_1_bacpaq.png',
       width: 1200,
       height: 630,
       alt: 'Pong Kaboom',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: 'Pong Kaboom',
     description: 'Pong game built with Kaboom.js',
     images: {
-      url: 'https://res.cloudinary.com/dk7dt0kk3/image/upload/v1714301230/Pong_Kaboom_meta_cswa00.svg',
+      url: 'https://res.cloudinary.com/dk7dt0kk3/image/upload/v1714310236/Frame_1_bacpaq.png',
       width: 1200,
       height: 630,
       alt: 'Pong Kaboom',
