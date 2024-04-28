@@ -39,6 +39,13 @@ const usePongKaboom = () => {
         })
         k.go('main')
       })
+
+      k.onTouchStart(() => {
+        k.play('bg', {
+          loop: true,
+        })
+        k.go('main')
+      })
     })
 
     k.go('start')
@@ -74,6 +81,11 @@ const usePongKaboom = () => {
         if (slider.pos.x > k.width()) {
           slider.pos.x = k.width()
         }
+      })
+
+      // Touch controls
+      k.onTouchMove((pos) => {
+        slider.pos.x = pos.x
       })
 
       // Add walls
@@ -178,6 +190,11 @@ const usePongKaboom = () => {
       ])
 
       k.onKeyPress(() => {
+        score = 0
+        k.go('main')
+      })
+
+      k.onTouchStart(() => {
         score = 0
         k.go('main')
       })
