@@ -35,16 +35,10 @@ const usePongKaboom = () => {
       ])
 
       k.onKeyPress(() => {
-        k.play('bg', {
-          loop: true,
-        })
         k.go('main')
       })
 
       k.onTouchStart(() => {
-        k.play('bg', {
-          loop: true,
-        })
         k.go('main')
       })
     })
@@ -61,7 +55,7 @@ const usePongKaboom = () => {
           radius: 10,
         }),
         k.color(167, 128, 231),
-        k.pos(k.width() / 2, k.height() - 50),
+        k.pos(k.width() / 2, k.height() - 20),
         k.area(),
         k.body({
           isStatic: true,
@@ -106,10 +100,13 @@ const usePongKaboom = () => {
 
       k.wait(1, () => {
         ball.vel = k.vec2(100, 200)
+        k.play('bg', {
+          loop: true,
+        })
       })
 
       ball.onCollide('slider', () => {
-        const speedFactor = 1.1
+        const speedFactor = score > 30 ? 1.01 : score > 20 ? 1.025 : 1.1
         ball.vel = k.vec2(ball.vel.x * speedFactor, -ball.vel.y * speedFactor)
 
         // Increase score
