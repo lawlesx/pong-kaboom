@@ -16,21 +16,9 @@ export const metadata: Metadata = {
     images: {
       url: 'https://res.cloudinary.com/dk7dt0kk3/image/upload/v1714310236/Frame_1_bacpaq.png',
       width: 1200,
-      height: 630,
+      height: 628,
       alt: 'Pong Kaboom',
     },
-  },
-  twitter: {
-    title: 'Pong Kaboom',
-    description: 'Pong game built with Kaboom.js',
-    images: {
-      url: 'https://res.cloudinary.com/dk7dt0kk3/image/upload/v1714310236/Frame_1_bacpaq.png',
-      width: 1200,
-      height: 630,
-      alt: 'Pong Kaboom',
-    },
-    card: 'summary_large_image',
-    creator: '@lawlesx',
   },
   authors: { name: 'Aniruddha Sil', url: 'https://lawlesx.vercel.app/' },
   keywords: ['Kaboom.js', 'Pong'],
