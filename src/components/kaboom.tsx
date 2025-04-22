@@ -48,6 +48,8 @@ const usePongKaboom = () => {
     // Score
     let score = 0
 
+    let paddleHits = 0
+
     k.scene('main', () => {
       const slider = k.add([
         k.rect(k.width() / 4, 30, {
@@ -64,23 +66,51 @@ const usePongKaboom = () => {
         'slider',
       ])
 
+      const getSliderSpeed = () => {
+        // Base speed: 500
+        const baseSpeed = 500
+        // Increase by 4% per hit, capped at 2x base speed
+        const speedMultiplier = Math.min(2.0, 1 + paddleHits * 0.04)
+        return baseSpeed * speedMultiplier
+      }
+
       k.onKeyDown('left', () => {
-        slider.move(-500, 0)
+        const speed = getSliderSpeed()
+        slider.move(-speed, 0)
         if (slider.pos.x < 0) {
           slider.pos.x = 0
         }
       })
 
       k.onKeyDown('right', () => {
-        slider.move(500, 0)
+        const speed = getSliderSpeed()
+        slider.move(speed, 0)
         if (slider.pos.x > k.width()) {
           slider.pos.x = k.width()
         }
       })
 
-      // Touch controls
+      // Touch controls - we'll keep the position-based approach but add sensitivity
+      let lastTouchX = 0
       k.onTouchMove((pos) => {
-        slider.pos.x = pos.x
+        // Adjust touch sensitivity based on score
+        const sensitivity = 1 + score * 0.002 // Increase sensitivity with score
+
+        if (lastTouchX !== 0) {
+          // Calculate movement based on touch delta and sensitivity
+          const touchDelta = (pos.x - lastTouchX) * sensitivity
+          slider.pos.x += touchDelta
+
+          // Keep paddle within bounds
+          if (slider.pos.x < 0) slider.pos.x = 0
+          if (slider.pos.x > k.width()) slider.pos.x = k.width()
+        }
+
+        lastTouchX = pos.x
+      })
+
+      k.onTouchEnd(() => {
+        lastTouchX = 0 // Reset when touch ends
       })
 
       // Add walls
@@ -106,24 +136,60 @@ const usePongKaboom = () => {
       })
 
       ball.onCollide('slider', () => {
-        const speedFactor = score > 30 ? 1.01 : score > 20 ? 1.025 : 1.1
-        ball.vel = k.vec2(ball.vel.x * speedFactor, -ball.vel.y * speedFactor)
+        // Calculate where the ball hit the slider (normalized between -1 and 1)
+        const sliderWidth = k.width() / 4
+        const hitPos = (ball.pos.x - slider.pos.x) / (sliderWidth / 2)
+
+        // Ensure minimum horizontal angle (even for center hits)
+        // Use a non-linear mapping to create more natural bounces
+        const minAngle = Math.PI / 12 // Minimum 15 degree angle
+        const angle = Math.sign(hitPos) * Math.max(minAngle, Math.abs((hitPos * Math.PI) / 3))
+
+        // Add small random variation to avoid predictable patterns
+        const finalAngle = angle + (Math.random() * 0.1 - 0.05)
+
+        // Calculate speed based on current velocity
+        const speed = Math.sqrt(ball.vel.x * ball.vel.x + ball.vel.y * ball.vel.y)
+        const speedFactor = 1 + Math.min(0.5, score * 0.02) // Increase speed by 2% for every 10 points (up to 50% max)
+        const newSpeed = speed * speedFactor
+
+        // Set new velocity based on angle and speed
+        ball.vel = k.vec2(newSpeed * Math.sin(finalAngle), -newSpeed * Math.cos(finalAngle))
+
+        // Add paddle momentum if it's moving (keep as is)
+        if (k.isKeyDown('left')) {
+          ball.vel.x -= 50
+        }
+        if (k.isKeyDown('right')) {
+          ball.vel.x += 50
+        }
 
         // Increase score
         score++
         scoreText.text = score.toString()
+
+        paddleHits++ // Increment paddle hit count
       })
 
       ball.onCollide('topWall', () => {
-        ball.vel = k.vec2(ball.vel.x, -ball.vel.y)
+        ball.vel = k.vec2(
+          ball.vel.x * (1 + (Math.random() * 0.1 - 0.05)), // Small random factor
+          -ball.vel.y
+        )
       })
 
       ball.onCollide('leftWall', () => {
-        ball.vel = k.vec2(-ball.vel.x, ball.vel.y)
+        ball.vel = k.vec2(
+          -ball.vel.x,
+          ball.vel.y * (1 + (Math.random() * 0.1 - 0.05)) // Small random factor
+        )
       })
 
       ball.onCollide('rightWall', () => {
-        ball.vel = k.vec2(-ball.vel.x, ball.vel.y)
+        ball.vel = k.vec2(
+          -ball.vel.x,
+          ball.vel.y * (1 + (Math.random() * 0.1 - 0.05)) // Small random factor
+        )
       })
 
       // Destroy ball and show game over
