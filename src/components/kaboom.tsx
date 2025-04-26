@@ -255,11 +255,13 @@ const usePongKaboom = () => {
 
       k.onKeyPress(() => {
         score = 0
+        paddleHits = 0
         k.go('main')
       })
 
       k.onTouchStart(() => {
         score = 0
+        paddleHits = 0
         k.go('main')
       })
     })
